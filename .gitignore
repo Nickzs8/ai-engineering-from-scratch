@@ -120,3 +120,4 @@ projects/*/solution/demo-output/
 *.pth
 *.safetensors
 .venv/
+.venv/

@@ -3,17 +3,21 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: all
-              capabilities: [gpu]
+    devices:
+      - /dev/kfd
+      - /dev/dri
+    group_add:
+      - video
+    ipc: host
+    shm_size: 8g
+    security_opt:
+      - seccomp=unconfined
+    environment:
+      - HSA_OVERRIDE_GFX_VERSION=11.0.0
     volumes:
       - ../../../:/workspace
-      - ~/models:/models
-      - ~/datasets:/data
+      - /media/nickzs/D/models:/models
+      - /media/nickzs/D/datasets:/data
     ports:
       - "8888:8888"
     stdin_open: true
@@ -26,7 +30,4 @@ services:
       - "6333:6333"
       - "6334:6334"
     volumes:
-      - qdrant_data:/qdrant/storage
-
-volumes:
-  qdrant_data:
+      - /media/nickzs/D/qdrant:/qdrant/storage
